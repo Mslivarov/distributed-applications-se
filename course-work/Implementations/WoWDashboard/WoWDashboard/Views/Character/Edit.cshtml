@@ -1,0 +1,70 @@
+﻿@model WoWDashboard.Models.Character
+
+@{
+    ViewData["Title"] = "Edit Character";
+}
+
+<div class="container mt-5 fade-in slide-up" style="max-width: 600px;">
+    <h2 class="text-center mb-4" id="title" style="color: #d1d1e0;">Edit Character</h2>
+
+    <form asp-action="EditFinal" method="post" class="p-4 rounded" style="background-color: #1e1e2f; color: #d1d1e0;">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label class="form-label">Name:</label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Realm:</label>
+            <input asp-for="Realm" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Character Class:</label>
+            <input asp-for="CharacterClass" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Race:</label>
+            <input asp-for="Race" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Level:</label>
+            <input asp-for="Level" type="number" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Region:</label>
+            <select asp-for="Region" class="form-select" required>
+                <option value="">-- Select Region --</option>
+                <option value="us">US</option>
+                <option value="eu">EU</option>
+                <option value="kr">KR</option>
+                <option value="tw">TW</option>
+                <option value="cn">CN</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Guild:</label>
+            <input asp-for="Guild" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Raider.IO Score:</label>
+            <input asp-for="RaiderIoScore" type="number" step="0.01" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Avatar URL:</label>
+            <input asp-for="AvatarUrl" type="url" class="form-control" />
+        </div>
+
+        <div class="text-center d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-primary px-4 btn-animate">Save Changes</button>
+            <a asp-action="SavedCharacters" asp-controller="Character" class="btn btn-secondary px-4 btn-animate">Cancel</a>
+        </div>
+    </form>
+</div>
