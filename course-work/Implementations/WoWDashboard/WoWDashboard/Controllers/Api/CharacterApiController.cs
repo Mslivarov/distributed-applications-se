@@ -32,11 +32,14 @@ namespace WoWDashboard.Controllers.Api
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var query = _context.Characters
-                .Where(c => c.UserId == userId)
-                .Include(c => c.GearItems)
-                .Include(c => c.RaidProgression)
-                .AsQueryable();
+            var query = _context.UserCharacters
+            .Where(uc => uc.UserId == userId)
+            .Include(uc => uc.Character)
+                .ThenInclude(c => c.GearItems)
+            .Include(uc => uc.Character)
+                .ThenInclude(c => c.RaidProgression)
+            .Select(uc => uc.Character)
+            .AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -55,7 +58,7 @@ namespace WoWDashboard.Controllers.Api
                 "raiderioscore" => ascending ? query.OrderBy(c => c.RaiderIoScore) : query.OrderByDescending(c => c.RaiderIoScore),
                 "race" => ascending ? query.OrderBy(c => c.Race) : query.OrderByDescending(c => c.Race),
                 "realm" => ascending ? query.OrderBy(c => c.Realm) : query.OrderByDescending(c => c.Realm),
-                _ => query.OrderBy(c => c.Id) // Default sorting
+                _ => query.OrderBy(c => c.Id) 
             };
 
             var characters = await query

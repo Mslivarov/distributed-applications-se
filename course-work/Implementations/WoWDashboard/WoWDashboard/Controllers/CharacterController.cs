@@ -134,6 +134,11 @@ namespace WoWDashboard.Controllers
                 _context.Characters.Add(character);
                 await _context.SaveChangesAsync();
                 existingCharacter = character;
+                var (score, progression) = await _raiderIOService.GetRaiderIoProfileAsync(name, realm, region);
+                var equipedItems = await _blizzardService.GetCharacterEquipmentAsync(name, realm, region);
+                existingCharacter.GearItems = equipedItems;
+                existingCharacter.RaiderIoScore = score;
+                existingCharacter.RaidProgression = progression;
             }
 
             var alreadyLinked = await _context.UserCharacters
@@ -150,16 +155,11 @@ namespace WoWDashboard.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            var (score, progression) = await _raiderIOService.GetRaiderIoProfileAsync(name, realm, region);
-            var equipedItems = await _blizzardService.GetCharacterEquipmentAsync(name, realm, region);
             var avatarUrl = await _blizzardService.GetCharacterAvatartAsync(name, realm, region);
             existingCharacter.OriginalName = character.Name;
             existingCharacter.OriginalRealm = character.Realm;
             existingCharacter.OriginalRegion = character.Region;
             existingCharacter.AvatarUrl = avatarUrl;
-            existingCharacter.GearItems = equipedItems;
-            existingCharacter.RaiderIoScore = score;
-            existingCharacter.RaidProgression = progression;
 
             _context.Characters.Update(existingCharacter);
             await _context.SaveChangesAsync();
